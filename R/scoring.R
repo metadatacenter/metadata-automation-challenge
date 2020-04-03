@@ -199,6 +199,7 @@ aggregate_res_scores <- function(res_scores, aggregate_by = "max") {
   
   scores = map_dbl(res_scores, function(x) { sum(x$score, na.rm = TRUE) })
 
+  print(glue::glue("@Individual scores: {scores}\n"))
   # Get max of all result scores
   if (aggregate_by == "max") {
     max(scores, na.rm = TRUE)
@@ -278,7 +279,8 @@ get_overall_score <- function(
   
   n_columns <- length(sub_data$columns)
   col_scores <- purrr::map(1:n_columns, function(col) {
-    message(glue::glue("Scoring column {col}..."))
+    cat("\n\n--------------------------------\n")
+    print(glue::glue("\nScoring column {col}...\n"))
     
     sub_col_data <- get_column_data(sub_data, col)
     anno_col_data <- get_column_data(anno_data, col)
@@ -290,12 +292,23 @@ get_overall_score <- function(
       aggregate_by
     )
     
+    ## Execute it, print it, and then execute it again in order to return it
     suppressWarnings(
       list(score = col_score$score,
            score_table = get_col_score_table(col_score) %>% 
              tibble::add_column(column_num = col, .before = 1)
       )
     )
+
+    print(glue::glue("@Final score: {col_score}\n"))
+
+    suppressWarnings(
+      list(score = col_score$score,
+           score_table = get_col_score_table(col_score) %>% 
+             tibble::add_column(column_num = col, .before = 1)
+      )
+    )
+    
   }) 
   
   list(
