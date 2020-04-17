@@ -103,3 +103,16 @@ $ docker run \
   metadata-scoring score-submission /submission.json /goldstandard.json
 1.24839015151515
 ```
+
+## Keeping it in synch with upstream
+Do this once
+```
+git remote add upstream https://github.com/Sage-Bionetworks/metadata-automation-challenge.git
+```
+Do this whenever there is a change in the upstream
+```
+git fetch upstream
+git checkout master
+git merge upstream/master
+```
+Source: https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork
